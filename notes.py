@@ -27,7 +27,17 @@ class NoteManager:
                 print(f"Заметка '{note['text']}' отмечена как выполненная")
                 return
         print(f"Заметка с id {note_id} не найдена")
-
+    def delete_note(self, note_id):
+        """Удалить заметку по ID"""
+        for i, note in enumerate(self.notes):
+            if note["id"] == note_id:
+                deleted = self.notes.pop(i)
+                print(f"Заметка '{deleted['text']}' удалена")
+                # Обновляем ID оставшихся заметок
+                for j, n in enumerate(self.notes):
+                    n["id"] = j + 1
+                return
+        print(f"Заметка с id {note_id} не найдена")
 
 def main():
     manager = NoteManager()
@@ -36,7 +46,8 @@ def main():
         print("\n1. Добавить заметку")
         print("2. Показать все заметки")
         print("3. Отметить заметку как выполненную")
-        print("4. Выход")
+        print("4. Удалить заметку")  # Новая опция
+        print("5. Выход")  # Изменилось с 4 на 5
 
         choice = input("Выберите действие: ")
 
@@ -51,7 +62,13 @@ def main():
                 manager.complete_note(note_id)
             except ValueError:
                 print("Введите корректный номер")
-        elif choice == "4":
+        elif choice == "4":  # Новый блок
+            try:
+                note_id = int(input("Введите ID заметки для удаления: "))
+                manager.delete_note(note_id)
+            except ValueError:
+                print("Введите корректный номер")
+        elif choice == "5":  # Изменилось с 4 на 5
             print("До свидания!")
             break
         else:
